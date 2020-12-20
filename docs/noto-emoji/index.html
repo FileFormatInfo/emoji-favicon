@@ -21,6 +21,8 @@ layout: default
 
 
 <script>
+    let icons = null;
+
     function getRandomInt(min, max) {
         min = Math.ceil(min);
         max = Math.floor(max);
@@ -54,13 +56,16 @@ layout: default
         results_h2.appendChild(refresh);
     }
 
-    const icons = {% include_relative index.json %};
+    fetch('index.json')
+        .then(response => response.json())
+        .then(data => {
+            icons = data;
 
-    document.querySelector("#count").textContent = icons.count;
-    document.querySelector("#lastmodified").textContent = icons.lastmodified;
+            document.querySelector("#count").textContent = icons.count;
+            document.querySelector("#lastmodified").textContent = icons.lastmodified;
 
-    randomIcons();
-
+            randomIcons();
+        });
 
 </script>
 
