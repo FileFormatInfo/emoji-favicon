@@ -1,0 +1,15 @@
+[build]
+  base = "./"
+  publish = "./_site"
+  command = "./build.sh"
+
+[[headers]]
+  for = "/*"
+  [headers.values]
+    Access-Control-Allow-Origin = "*"
+    X-Frame-Options = "sameorigin"
+    X-XSS-Protection = "1; report=https://fileformat.report-uri.com/r/d/xss/reportOnly"
+    Referrer-Policy = "unsafe-url"
+    X-Content-Type-Options = "nosniff"
+    Feature-Policy = "accelerometer 'none'; camera 'none'; geolocation 'none'; gyroscope 'none'; magnetometer 'none'; microphone 'none'; payment 'none'; usb 'none'"
+    Content-Security-Policy = "default-src 'self'; script-src 'self' 'unsafe-inline' www.google-analytics.com fileformat.wufoo.com secure.wufoo.com www.wufoo.com; style-src 'self' 'unsafe-inline' fonts.googleapis.com; img-src 'self' data: www.google-analytics.com www.vectorlogo.zone; child-src 'self' fileformat.wufoo.com docs.google.com; connect-src 'self' www.google-analytics.com; font-src 'self' fonts.gstatic.com; form-action 'self' *.wufoo.com; frame-ancestors 'self'; referrer 'unsafe-url'; prefetch-src 'self'; upgrade-insecure-requests; report-uri https://fileformat.report-uri.com/r/d/csp/reportOnly;"

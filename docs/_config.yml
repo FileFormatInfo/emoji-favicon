@@ -1,0 +1,19 @@
+#
+# _config.yml for VectorLogoZone
+#
+
+exclude: [ "*.sh" ]
+permalink: /news/:year/:month/:day/:title/index.:output_ext
+production_url: https://emoji-favicon.fileformat.info
+indexpage: index.html
+sharing_targets: [ "facebook", "twitter", "pinterest", "tumblr", "reddit" ]
+title : Emoji Favicons
+plugins:
+  - jekyll-redirect-from
+defaults:
+  -
+    scope:
+      path: ""
+      type: "pages"
+    values:
+      layout: "default"

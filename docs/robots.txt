@@ -1,0 +1,14 @@
+---
+noindex: true
+layout: none
+---
+#
+# robots.txt for emoji-favicon
+#
+# everything can be indexed!
+#
+
+Sitemap: {{ site.production_url }}/sitemap.xml
+
+User-agent: *
+Disallow: /honeypot.txt
