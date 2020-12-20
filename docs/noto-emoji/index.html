@@ -38,11 +38,9 @@ layout: default
 
         for (var loop = 0; loop < 30; loop++) {
             const index = getRandomInt(0, icons.data.length);
-            console.log(`loop=${loop}, index=${index}`);
             img = document.createElement("img");
             img.src = icons.data[index].icon;
             results.appendChild(img);
-            console.log("appending", img);
         }
         const results_h2 = document.querySelector("#results-h2");
         results_h2.textContent = "Random Selection";
