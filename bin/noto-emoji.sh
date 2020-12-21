@@ -12,6 +12,7 @@ echo "INFO: starting at $(date -u +%Y-%m-%dT%H:%M:%SZ)"
 # LATER: convert to args
 REPO_URL=https://github.com/googlefonts/noto-emoji
 SLUG=noto-emoji
+REPO_SUBDIR=svg
 
 SCRIPT_HOME="$( cd "$( dirname "$0" )" && pwd )"
 TMP_DIR=$(realpath "${SCRIPT_HOME}/../tmp")
@@ -31,7 +32,8 @@ if [ ! -d "${DEST_DIR}" ]; then
     mkdir -p "${DEST_DIR}"
 fi
 
-if [ ! -d "${TMP_DIR}/${SLUG}" ]; then
+REPO_DIR="${TMP_DIR}/${SLUG}"
+if [ ! -d "${REPO_DIR}" ]; then
     echo "INFO: cloning a fresh copy"
     git clone --depth 1 ${REPO_URL}.git ${TMP_DIR}/${SLUG}
 else
@@ -46,7 +48,7 @@ cat <<EOT >"${INDEX_FILE}"
 EOT
 
 
-SVG_FILES=($(find ${TMP_DIR}/${SLUG}/svg -name "*.svg"))
+SVG_FILES=($(find ${TMP_DIR}/${SLUG}/${REPO_SUBDIR} -name "*.svg"))
 echo "INFO: found ${#SVG_FILES[@]} SVGs"
 
 if [ "${MAX_ICONS:-BAD}" != "BAD" ]; then
@@ -57,7 +59,7 @@ fi
 echo -n "INFO processing..."
 for SVG_FILE in "${SVG_FILES[@]}"
 do
-    #echo "DEBUG: processing ${SVG_FILE}..."
+    echo "DEBUG: processing ${SVG_FILE}..."
     ICO_FILE="${DEST_DIR}/$(basename "${SVG_FILE}" ".svg").ico"
 
     if [ ! -f "${ICO_FILE}" ]; then
@@ -71,9 +73,9 @@ do
 
     cat <<EOT >>"${INDEX_FILE}"
     {
-        "source": "${REPO_URL}/LATER",
+        "source": "${REPO_URL}/${REPO_SUBDIR}/$(basename "${SVG_FILE}")",
         "icon": "$(basename ${ICO_FILE})",
-        "search": ""
+        "search": "$(basename "${SVG_FILE}" ".svg")"
     }
 EOT
 done
@@ -81,8 +83,11 @@ echo ""
 
 cat <<EOT >>"${INDEX_FILE}"
     ],
+    "commit": "$(cd "${REPO_DIR}" && git rev-parse HEAD)",
     "count": ${#SVG_FILES[@]},
-    "lastmodified": "$(date -u +%Y-%m-%dT%H:%M:%SZ)"
+    "lastchecked": "$(date -u +%Y-%m-%dT%H:%M:%SZ)",
+    "lastmodified": "$(cd "${REPO_DIR}" && git log -1 --format=%ad --date=format:"%Y-%m-%dT%H:%M:%SZ")",
+    "repo": "${REPO_URL}"
 }
 EOT
 
