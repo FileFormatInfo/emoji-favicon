@@ -75,7 +75,7 @@ do
     {
         "source": "${REPO_URL}/${REPO_SUBDIR}/$(basename "${SVG_FILE}")",
         "icon": "$(basename ${ICO_FILE})",
-        "search": "$(basename "${SVG_FILE}" ".svg")"
+        "search": "$(basename "${SVG_FILE}" ".svg" | sed -E -e 's/emoji_u|_/ /g')"
     }
 EOT
 done
