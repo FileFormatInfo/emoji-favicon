@@ -1,19 +1,18 @@
 # To Do
 
-- set width/height to 128
-- detail page:
-    - website link
-    - repo link
-    - repo last updated and commit
-    - last checked
-    - license (text + link)
+- better card sizing on home page
+- /xx/index.html icons:
+  - set width/height to 128
+  - link to source
+  - download link
+  - info link (to FFI)
+- search to also search emoji names
+- custom 404
+- links to DIY
+- notes about hotlinking
 
-- /xx/index.html icons should be hyperlinked
-- _include/search.html: search (unicode codepoint)
-- js/search.js
+## more emoji sources
+
 - twemoji
 - fxemoji
 - openmoji
-- links to DIY
-- notes about hotlinking
-- custom 404

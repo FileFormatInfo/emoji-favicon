@@ -19,6 +19,5 @@ jq \
 jekyll build \
     --source docs
 
-# LATER: remove MAX_ICONS
-TARGET_DIR=_site MAX_ICONS=500 ./bin/noto-emoji.sh
+TARGET_DIR=_site MAX_ICONS=${MAX_ICONS:-9999} ./bin/noto-emoji.sh
 

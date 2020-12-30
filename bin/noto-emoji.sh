@@ -9,16 +9,20 @@ set -o nounset
 
 echo "INFO: starting at $(date -u +%Y-%m-%dT%H:%M:%SZ)"
 
-# LATER: convert to args
+# LATER: load from env
 REPO_URL=https://github.com/googlefonts/noto-emoji
-SLUG=noto-emoji
 REPO_SUBDIR=svg
+LICENSE_TEXT="Apache 2.0"
+LICENSE_URL=https://github.com/googlefonts/noto-emoji/blob/master/LICENSE
+
+
+REPO_DIR=$(basename ${REPO_URL})
 
 SCRIPT_HOME="$( cd "$( dirname "$0" )" && pwd )"
 TMP_DIR=$(realpath "${SCRIPT_HOME}/../tmp")
 
 TARGET_DIR=${TARGET_DIR:-_site}
-DEST_DIR=$(realpath "${SCRIPT_HOME}/../${TARGET_DIR}/${SLUG}")
+DEST_DIR=$(realpath "${SCRIPT_HOME}/../${TARGET_DIR}/${REPO_DIR}")
 
 if [ -d "${TMP_DIR}" ]; then
     echo "WARNING: re-using existing tmp directory ${TMP_DIR}"
@@ -32,10 +36,10 @@ if [ ! -d "${DEST_DIR}" ]; then
     mkdir -p "${DEST_DIR}"
 fi
 
-REPO_DIR="${TMP_DIR}/${SLUG}"
-if [ ! -d "${REPO_DIR}" ]; then
+LOCAL_DIR="${TMP_DIR}/${REPO_DIR}"
+if [ ! -d "${LOCAL_DIR}" ]; then
     echo "INFO: cloning a fresh copy"
-    git clone --depth 1 ${REPO_URL}.git ${TMP_DIR}/${SLUG}
+    git clone --depth 1 ${REPO_URL}.git ${LOCAL_DIR}
 else
     echo "INFO: using existing clone"
 fi
@@ -48,7 +52,7 @@ cat <<EOT >"${INDEX_FILE}"
 EOT
 
 
-SVG_FILES=($(find ${TMP_DIR}/${SLUG}/${REPO_SUBDIR} -name "*.svg"))
+SVG_FILES=($(find ${LOCAL_DIR}/${REPO_SUBDIR} -name "*.svg"))
 echo "INFO: found ${#SVG_FILES[@]} SVGs"
 
 if [ "${MAX_ICONS:-BAD}" != "BAD" ]; then
@@ -72,22 +76,24 @@ do
     fi
 
     cat <<EOT >>"${INDEX_FILE}"
-    {
-        "source": "${REPO_URL}/${REPO_SUBDIR}/$(basename "${SVG_FILE}")",
-        "icon": "$(basename ${ICO_FILE})",
-        "search": "$(basename "${SVG_FILE}" ".svg" | sed -E -e 's/emoji_u|_/ /g')"
-    }
+        {
+            "source": "${REPO_URL}/${REPO_SUBDIR}/$(basename "${SVG_FILE}")",
+            "icon": "$(basename ${ICO_FILE})",
+            "search": "$(basename "${SVG_FILE}" ".svg" | sed -E -e 's/emoji_u|_/ /g')"
+        }
 EOT
 done
 echo ""
 
 cat <<EOT >>"${INDEX_FILE}"
     ],
-    "commit": "$(cd "${REPO_DIR}" && git rev-parse HEAD)",
+    "commit": "$(cd "${LOCAL_DIR}" && git rev-parse HEAD)",
     "count": ${#SVG_FILES[@]},
     "lastchecked": "$(date -u +%Y-%m-%dT%H:%M:%SZ)",
-    "lastmodified": "$(cd "${REPO_DIR}" && git log -1 --format=%ad --date=format:"%Y-%m-%dT%H:%M:%SZ")",
-    "repo": "${REPO_URL}"
+    "lastmodified": "$(cd "${LOCAL_DIR}" && git log -1 --format=%ad --date=format:"%Y-%m-%dT%H:%M:%SZ")",
+    "license_text": "${LICENSE_TEXT}",
+    "license_url": "${LICENSE_URL}",
+    "repo_url": "${REPO_URL}"
 }
 EOT
 
