@@ -52,7 +52,7 @@ cat <<EOT >"${INDEX_FILE}"
 EOT
 
 
-SVG_FILES=($(find ${LOCAL_DIR}/${REPO_SUBDIR} -name "*.svg"))
+SVG_FILES=($(find "${LOCAL_DIR}/${REPO_SUBDIR}" -name "*.svg" | sort))
 echo "INFO: found ${#SVG_FILES[@]} SVGs"
 
 if [ "${MAX_ICONS:-BAD}" != "BAD" ]; then

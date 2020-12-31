@@ -1,6 +1,7 @@
 # Emoji Favicons [<img alt="emoji-favicon logo" src="docs/favicon.svg" height="90" align="right" />](https://emoji-favicon.fileformat.info/)
 
-<!-- LATER: badges -->
+[![Netlify Status](https://api.netlify.com/api/v1/badges/bd529929-0d6b-43ca-b2b9-ecc8d9685db4/deploy-status)](https://app.netlify.com/sites/svg-emoji-favicon/deploys)
+
 
 Need a nice favicon?  There are a bunch of [open source sets of SVG emoji](https://github.com/VectorLogoZone/awesome-emoji#images) that look great at favicons.
 
