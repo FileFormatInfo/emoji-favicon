@@ -63,7 +63,7 @@ fi
 echo -n "INFO processing..."
 for SVG_FILE in "${SVG_FILES[@]}"
 do
-    echo "DEBUG: processing ${SVG_FILE}..."
+    #echo "DEBUG: processing ${SVG_FILE}..."
     ICO_FILE="${DEST_DIR}/$(basename "${SVG_FILE}" ".svg").ico"
 
     if [ ! -f "${ICO_FILE}" ]; then
