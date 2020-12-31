@@ -9,16 +9,31 @@ set -o nounset
 
 echo "INFO: starting at $(date -u +%Y-%m-%dT%H:%M:%SZ)"
 
-# LATER: load from env
-REPO_URL=https://github.com/googlefonts/noto-emoji
-REPO_SUBDIR=svg
-LICENSE_TEXT="Apache 2.0"
-LICENSE_URL=https://github.com/googlefonts/noto-emoji/blob/master/LICENSE
-
-
-REPO_DIR=$(basename ${REPO_URL})
+EMOJI=${1:-BAD}
+if [ "${EMOJI}" = "BAD"  ];
+then
+	echo "USAGE: get-emoji.sh EMOJI"
+	echo "       EMOJI is one of the .env files with the variables for a set of emoji"
+	exit 1
+fi
 
 SCRIPT_HOME="$( cd "$( dirname "$0" )" && pwd )"
+ENVFILE="${SCRIPT_HOME}/$(basename "${EMOJI}" .env).env"
+if [ ! -f "${ENVFILE}" ]
+then
+    echo "ERROR: no .env file '${ENVFILE}'!"
+    exit 1
+fi
+
+source "${ENVFILE}"
+
+#
+# REPO_DIR should only be needed if a repo is used more than once
+#
+if [ "${REPO_DIR:-BAD}" == "BAD" ]; then
+    REPO_DIR=$(basename "${REPO_URL}")
+fi
+
 TMP_DIR=$(realpath "${SCRIPT_HOME}/../tmp")
 
 TARGET_DIR=${TARGET_DIR:-_site}
@@ -39,7 +54,7 @@ fi
 LOCAL_DIR="${TMP_DIR}/${REPO_DIR}"
 if [ ! -d "${LOCAL_DIR}" ]; then
     echo "INFO: cloning a fresh copy"
-    git clone --depth 1 ${REPO_URL}.git ${LOCAL_DIR}
+    git clone --depth 1 --branch "${REPO_BRANCH}" "${REPO_URL}.git" "${LOCAL_DIR}"
 else
     echo "INFO: using existing clone"
 fi
@@ -77,7 +92,7 @@ do
 
     cat <<EOT >>"${INDEX_FILE}"
         {
-            "source": "${REPO_URL}/${REPO_SUBDIR}/$(basename "${SVG_FILE}")",
+            "source": "${REPO_URL}/blob/${REPO_BRANCH}/${REPO_SUBDIR}/$(basename "${SVG_FILE}")",
             "icon": "$(basename ${ICO_FILE})",
             "search": "$(basename "${SVG_FILE}" ".svg" | sed -E -e 's/emoji_u|_/ /g')"
         }

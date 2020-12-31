@@ -19,5 +19,9 @@ jq \
 jekyll build \
     --source docs
 
-TARGET_DIR=_site MAX_ICONS=${MAX_ICONS:-9999} ./bin/noto-emoji.sh
+export TARGET_DIR=_site
+export MAX_ICONS=${MAX_ICONS:-9999}
+./bin/get-emoji.sh noto-emoji
+./bin/get-emoji.sh twemoji
+./bin/get-emoji.sh noto-flags
 

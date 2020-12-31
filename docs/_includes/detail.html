@@ -1,0 +1,170 @@
+
+<div class="row  justify-content-center">
+    <div class="col-sm-5">
+        <form>
+            <div class="input-group mb-3">
+                <input type="text" class="form-control" placeholder="Unicode Codepoint" aria-label="Search query" aria-describedby="search-btn" id="q"/>
+                <button class="btn btn-primary" type="button" id="search-btn">Search</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col">
+        <h2 id="results-h2"></h2>
+        <div id="results">
+
+        </div>
+    </div>
+</div>
+
+<div class="row mt-3">
+    <div class="col">
+        <table class="table table-bordered" style="width:auto;">
+            <tr>
+                <td>Repository</td>
+                <td id="repo">Pending...</td>
+            </tr>
+            <tr>
+                <td>License</td>
+                <td id="license">Pending...</td>
+            </tr>
+            <tr>
+                <td># of favicons</td>
+                <td id="count">Pending...</td>
+            </tr>
+            <tr>
+                <td>Last updated</td>
+                <td id="lastmodified">Pending...</td>
+            </tr>
+        </table>
+    </div>
+</div>
+
+<script>
+    const MAX_RESULTS = 70;
+    let icons = null;
+
+    function getRandomInt(min, max) {
+        min = Math.ceil(min);
+        max = Math.floor(max);
+        return Math.floor(Math.random() * (max - min) + min); //The maximum is exclusive and the minimum is inclusive
+    }
+
+    function doSearch(rawQuery) {
+        if (!rawQuery) {
+            randomIcons();
+            return;
+        }
+
+        const query = rawQuery.trim().toLowerCase();
+        const results = [];
+        for (var loop = 0; loop < icons.data.length; loop++) {
+            if (icons.data[loop].icon.indexOf(query) != -1) {
+                results.push(loop);
+                if (results.length > MAX_RESULTS) {
+                    break;
+                }
+            }
+        }
+
+        const h2 = document.createElement("span");
+        h2.textContent = `Results for '${query}'`;
+        showIcons(h2, results);
+    }
+
+    function showIcons(h2, indices) {
+        const results = document.querySelector("#results");
+        while (results.firstChild) {
+            results.removeChild(results.firstChild);
+        }
+        if (indices && indices.length) {
+            for (var loop = 0; loop < indices.length; loop++) {
+                const img = document.createElement("img");
+                img.src = icons.data[indices[loop]].icon;
+                img.setAttribute('style', 'width:64px;height:64px;margin:0.25rem;');
+                //img.setAttribute('alt', 'LATER');
+
+                const link = document.createElement("a");
+                link.href = icons.data[indices[loop]].source;
+                link.appendChild(img);
+
+                results.appendChild(link);
+            }
+        } else {
+            const warning = document.createElement("div");
+            warning.classList.add("alert");
+            warning.classList.add("alert-danger");
+            warning.textContent = "(not found)";
+            results.appendChild(warning);
+        }
+
+        const results_h2 = document.querySelector("#results-h2");
+        while (results_h2.firstChild) {
+            results_h2.removeChild(results_h2.firstChild);
+        }
+       if (Array.isArray(h2)) {
+            h2.forEach(x => results_h2.appendChild(x));
+        } else {
+            results_h2.appendChild(h2);
+        }
+
+    }
+
+    function randomIcons() {
+
+        const indices = [];
+
+        for (var loop = 0; loop < MAX_RESULTS; loop++) {
+            indices.push(getRandomInt(0, icons.data.length));
+        }
+
+        const h2_text = document.createElement("span");
+        h2_text.textContent = "Random Selection";
+
+        const refresh = document.createElement("button");
+        refresh.classList.add("btn");
+        refresh.classList.add("btn-primary");
+        refresh.classList.add("ms-3");
+        refresh.textContent = "Refresh";
+        refresh.onclick = randomIcons;
+
+        showIcons( [ h2_text, refresh ], indices);
+    }
+
+    fetch('index.json')
+        .then(response => response.json())
+        .then(data => {
+            icons = data;
+
+            document.querySelector("#count").textContent = icons.count;
+            document.querySelector("#lastmodified").textContent = icons.lastmodified;
+
+            const licenseEl = document.querySelector("#license");
+            while (licenseEl.firstChild) {
+                licenseEl.removeChild(licenseEl.firstChild);
+            }
+            const license = document.createElement('a');
+            license.setAttribute('href', icons.license_url);
+            license.textContent = icons.license_text;
+            licenseEl.appendChild(license);
+
+            const repoEl = document.querySelector("#repo");
+            while (repoEl.firstChild) {
+                repoEl.removeChild(repoEl.firstChild);
+            }
+            const repo = document.createElement('a');
+            repo.setAttribute('href', icons.repo_url);
+            repo.textContent = icons.repo_url;
+            repoEl.appendChild(repo);
+
+            randomIcons();
+
+            document.querySelector("#q").addEventListener('input', function(evt) {
+                doSearch(evt.target.value);
+            });
+        });
+
+</script>
+
