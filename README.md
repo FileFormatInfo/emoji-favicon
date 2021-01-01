@@ -53,6 +53,7 @@ The code is [Affero GPL v3](LICENSE.txt)
 [![Github](https://www.vectorlogo.zone/logos/github/github-ar21.svg)](https://www.github.com/ "git hosting")
 [![ImageMagick](https://www.vectorlogo.zone/logos/imagemagick/imagemagick-ar21.svg)](https://www.imagemagick.org/ "Image manipulation")
 [![Jekyll](https://www.vectorlogo.zone/logos/jekyllrb/jekyllrb-ar21.svg)](https://jekyllrb.com/ "Static site generator")
+[![Netlify](https://www.vectorlogo.zone/logos/netlify/netlify-ar21.svg)](https://www.netlify.com/ "CI and hosting")
 [![Noah Marcuse](https://www.vectorlogo.zone/logos/marcuse_ink/marcuse_ink-ar21.svg)](https://noah.marcuse.ink/ "Making logos!")
 
 The various emoji sources are listed on the [home page](https://emoji-favicon.fileformat.info/).
