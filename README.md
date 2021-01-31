@@ -3,7 +3,7 @@
 [![Netlify Status](https://api.netlify.com/api/v1/badges/bd529929-0d6b-43ca-b2b9-ecc8d9685db4/deploy-status)](https://app.netlify.com/sites/svg-emoji-favicon/deploys)
 [![30 day uptime](https://img.shields.io/nodeping/uptime/k4vws8sh-l4s3-4pmc-ad3t-vi9r0344u3cj.svg?label=30-day%20uptime&style=flat)](https://nodeping.com/reports/checks/k4vws8sh-l4s3-4pmc-ad3t-vi9r0344u3cj)
 
-Need a nice favicon?  There are a bunch of [open source sets of SVG emoji](https://github.com/VectorLogoZone/awesome-emoji#images) that look great at favicons.
+Need a nice favicon?  There are a bunch of [open source sets of SVG emoji](https://github.com/VectorLogoZone/awesome-emoji#images) that look great as favicons.
 
 ## Using
 
